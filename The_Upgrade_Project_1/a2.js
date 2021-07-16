@@ -7,7 +7,7 @@ function button1_Click()
 
 function verificar1()
 {
-    alert("Verificar1");
+    
 }
 
 function start()

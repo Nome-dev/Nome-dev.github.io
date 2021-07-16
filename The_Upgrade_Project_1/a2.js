@@ -12,5 +12,5 @@ function verificar1()
 
 function start()
 {
-    
+    alert("Test");
 }

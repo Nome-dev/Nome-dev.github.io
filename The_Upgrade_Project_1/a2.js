@@ -14,8 +14,3 @@ function start()
 {
     
 }
-
-function onload_Body()
-{
-    
-}

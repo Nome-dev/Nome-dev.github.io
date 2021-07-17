@@ -10,7 +10,7 @@ function button1_Click()
 
 function verificar1()
 {
-    var value1 = tb1.textContent;
+    var value1 = tb1.value;
 
     alert(value1);
 }

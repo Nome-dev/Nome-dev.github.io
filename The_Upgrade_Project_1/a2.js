@@ -12,7 +12,7 @@ function verificar1()
 {
     var value1 = tb1.value;
 
-    alert(value1);
+    //alert(value1);
 }
 
 function start()

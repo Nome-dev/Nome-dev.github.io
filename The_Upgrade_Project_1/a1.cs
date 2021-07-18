@@ -153,7 +153,7 @@ namespace Classe1
 
         public static void writeFile1()//Escreve no arquivo "./a2.js", inserindo nele as verificações das regras
         {
-
+            
         }
     }
 }

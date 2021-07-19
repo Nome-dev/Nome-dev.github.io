@@ -1,4 +1,4 @@
-var p2 = document.getElementById("p2");//Variável que representa o objeto de saída
+//var p2 = document.getElementById("p2");//Variável que representa o objeto de saída
 var tb1 = document.getElementById("textBox1");//Variável que representa o objeto de entrada
 
 var out1 = "";
@@ -26,7 +26,7 @@ function start()
 
 function aplicar1()
 {
-    p2.value = out1;
+    document.getElementById("p2").innerText = out1;
 }
 
 function verificar2(value1)

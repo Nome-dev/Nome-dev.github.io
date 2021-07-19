@@ -38,7 +38,7 @@ function verificar2(value1)
     
     if(value1 == "A test?" | value1 == "You have knowledge about the test?")
     {
-        out1 = "Yep, the test";
+        out1 = "Oops, this changed, kk";
     }
     
     if(value1 == "Input" | value1 == "A other input" | value1 == "And a other input")

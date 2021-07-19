@@ -58,6 +58,7 @@ namespace Classe1
         public static int n6 = 0;//Fim da região de escrita
         public static string[] textChanged1 = new string[textChanged1_Size];
         public static string[] outText1 = new string[outText1_Size];
+        public static string[] outText2 = new string[outText1_Size];
         //Ler arquivo do path2 #start
 
         //Informações úteis #start
@@ -215,6 +216,11 @@ namespace Classe1
                 outText1[i1] = file1[i1];
             }
 
+            for(int i3 = n5; i3 < outText1.Length; i3++)
+            {
+                outText1[i3] = "";
+            }
+
             //outText1 = file1;
             for(int i3 = n5; i3 < n6; i3++)
             {
@@ -289,12 +295,15 @@ namespace Classe1
 
             outText1[n6] = "}";
 
+            outText2 = new string[n6 + 1];
+
             for(int i1 = 0; i1 <= n6; i1++)
             {
+                outText2[i1] = outText1[i1];
                 Console.WriteLine(outText1[i1]);
             }
 
-            File.WriteAllLines(path2, outText1);
+            File.WriteAllLines(path2, outText2);
 
             salvar.write3("n6", Convert.ToString(n6));
         }

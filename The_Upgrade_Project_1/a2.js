@@ -31,5 +31,5 @@ function aplicar1()
 
 function verificar2(value1)
 {
-    out1 = value1;
+    
 }

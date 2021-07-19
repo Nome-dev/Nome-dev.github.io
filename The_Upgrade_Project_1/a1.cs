@@ -36,9 +36,10 @@ namespace Classe1
         private static int rules_Size = 4096;
         private static int rules_Chars_Size = 4096;
         private static int Position_Size = 512;
-        private static int Object_Size = 512;
+        private static int Object_Size = 1024;
         private static int file1_Size = 4096;
         private static int textChanged1_Size = 4096;
+        private static int outText1_Size = 4096 * 2;
         //Tamanhos #end
 
         //Caminhos #start
@@ -56,7 +57,7 @@ namespace Classe1
         public static int n5 = 0;//Início da região de escrita
         public static int n6 = 0;//Fim da região de escrita
         public static string[] textChanged1 = new string[textChanged1_Size];
-        public static string[] outText1 = new string[file1_Size];
+        public static string[] outText1 = new string[outText1_Size];
         //Ler arquivo do path2 #start
 
         //Informações úteis #start
@@ -66,29 +67,41 @@ namespace Classe1
         public static int[] n3 = new int[Object_Size];//n3[objeto] = Número de possíveis entradas para este objeto
         public static int[,] n4 = new int[Position_Size, Object_Size];//n4[Position, Object] = Type [(0 = "Output"; 1 = "Input")];
         public static string[] objects2 = new string[Object_Size];
+        public static string[,] objects3 = new string[Position_Size, Object_Size];
         //Informações úteis #end
 
         public static void Main(string[] args)//Função principal
         {
-            try
-            {
+            //try
+            //{
                 Start(args);//Inicia a aplicação
-            }
-            catch(Exception exception1)
-            {
-                Console.WriteLine(exception1.Message);
-            }
+            //}
+            //catch(Exception exception1)
+            //{
+            //    Console.WriteLine(exception1.Message);
+            //}
         }
 
         public static void Start(string[] args)
         {
-            initialConfiguration1(args);
+            List<Action> process1 = new List<Action>();
 
-            readFile1();
+            process1.Add(() => initialConfiguration1(args));
+            process1.Add(() => readFile1());
+            process1.Add(() => readFile2());
+            process1.Add(() => writeFile1());
 
-            readFile2();
-
-            writeFile1();
+            foreach(Action a in process1)
+            {
+                try
+                {
+                    a();
+                }
+                catch(Exception e1)
+                {
+                    Console.WriteLine(e1.Message);
+                }
+            }
         }
 
         public static void initialConfiguration1(string[] args)//Faz as configurações iniciais, sobre o caminho do arquivo que contém as regras
@@ -105,10 +118,12 @@ namespace Classe1
 
         public static void readFile1()//Lê as informações do arquivo de regras e organiza as informações
         {
+            rules1 = new string[File.ReadAllLines(path1).Length];
             rules1 = File.ReadAllLines(path1);
 
             int n9 = 0;
 
+            
             for(int i1 = 0; i1 < rules1.Length; i1++)
             {
                 if(rules1[i1][0] == 'o' && rules1[i1][1] == ':' && rules1[i1][2] == ' ')
@@ -147,11 +162,16 @@ namespace Classe1
                     }
 
                     objects1[n2, n1, 1] = new string(rules1_Chars);
+                    objects3[n2, n1] = new string(rules1_Chars);
                     n4[n2, n1] = 1;
 
                     Console.WriteLine(objects1[n2, n1, 1] + " | " + Convert.ToString(n4[n2, n1]) + " | " + Convert.ToString(n1));
 
                     n2++;
+                }
+                else
+                {
+                    Console.WriteLine("Erro");
                 }
 
                 n3[n1] = n2;
@@ -160,6 +180,7 @@ namespace Classe1
 
         public static void readFile2()//Lê o arquivo "./a2.js" e prepara informações
         {
+            file1 = new string[File.ReadAllLines(path2).Length];
             file1 = File.ReadAllLines(path2);
 
             if(salvar.existe1("n5") == false)
@@ -169,7 +190,7 @@ namespace Classe1
 
             if(salvar.existe1("n5") == true)
             {
-                n5 = Convert.ToInt32(salvar.read2("n5"));
+                n5 = Convert.ToInt32(salvar.read2("n5")) - 18;
             }
 
             if(salvar.existe1("n6") == false)
@@ -185,74 +206,95 @@ namespace Classe1
 
         public static void writeFile1()//Escreve no arquivo "./a2.js", inserindo nele as verificações das regras
         {
-            n6 = n1 * 5 + n5;
+            n6 = (n1 + 1) * 5 + n5;
             int n7 = 0;
-            int n8 = 0;
+            int n8 = 0;        
 
-            //Console.WriteLine("O problema não está acima deste lugar");
-
-            //Há algum erro aqui #start
-
-            for(int i1 = 0; i1 < n5; i1++)
+            for(int i1 = 0; i1 < file1.Length; i1++)
             {
                 outText1[i1] = file1[i1];
             }
 
-            //Há algum erro aqui #end
-
-            for(int i1 = n5; i1 < n6; i1++)
+            //outText1 = file1;
+            for(int i3 = n5; i3 < n6; i3++)
             {
-
-                if(n7 > 4)
-                {
-                    n7 = 0;
-                    n8++;
-                }
-
                 if(n7 == 0)
                 {
-                    outText1[i1] = "    if(";
 
-                    for(int i2 = 0; i2 < n3[n8]; i2++)
+                    outText1[i3] = "    if(";
+
+                    //Console.WriteLine("O problema não está acima deste lugar");
+
+                    for(int i2 = 0; i2 <= n3[n8]; i2++)
                     {
                         if(i2 == 0)
                         {
-                            outText1[i1] = outText1[i1] + "value1 == " + objects1[i2, n8, 1];
+                            if(objects3[i2, n8] == null | objects3[i2, n8] == "")
+                            {
+                                //Console.WriteLine("Valor inválido!");
+                            }
+                            else
+                            {
+                                outText1[i3] = outText1[i3] + "value1 == \"" + objects3[i2, n8] + "\"";
+                            }
                         }
 
                         if(i2 > 0)
                         {
-                            outText1[i1] = outText1[i1] + " | value1 == " + objects1[i2, n8, 1];
+                            if(objects3[i2, n8] == null | objects3[i2, n8] == "")
+                            {
+                                //Console.WriteLine("Valor inválido!");
+                            }
+                            else
+                            {
+                                outText1[i3] = outText1[i3] + " | value1 == \"" + objects3[i2, n8] + "\"";
+                            }
                         }
                     }
 
-                    outText1[i1] = outText1[i1] + ")";
+                    outText1[i3] = outText1[i3] + ")";
                 }
 
                 if(n7 == 1)
                 {
-                    outText1[i1] = "    {";
+                    outText1[i3] = "    {";
                 }
 
                 if(n7 == 2)
                 {
-                    outText1[i1] = "out1 = \"" + objects2[n8] + "\";";
+                    outText1[i3] = "        out1 = \"" + objects2[n8] + "\";";
                 }
 
                 if(n7 == 3)
                 {
-                    outText1[i1] = "    }";
+                    outText1[i3] = "    }";
                 }
 
                 if(n7 == 4)
                 {
-                    outText1[i1] = "    ";
+                    outText1[i3] = "    ";
                 }
 
+                //Console.WriteLine(outText1[i3]);
+
                 n7++;
+
+                if(n7 > 4)
+                {
+                    n7 = 0;
+                        
+                    n8++;
+                }
             }
 
-            outText1[n6 + 2] = "}";
+            outText1[n6] = "}";
+
+            for(int i1 = 0; i1 <= n6; i1++)
+            {
+                Console.WriteLine(outText1[i1]);
+            }
+
+            File.WriteAllLines(path2, outText1);
 
             salvar.write3("n6", Convert.ToString(n6));
         }

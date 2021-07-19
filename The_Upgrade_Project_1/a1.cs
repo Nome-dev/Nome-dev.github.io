@@ -52,10 +52,11 @@ namespace Classe1
         //Ler arquivo do path1 #end
 
         //Ler arquivo do path2 #start
-        public static string[] file1 = new string[file1_Size];
+        public static string[] file1 = new string[file1_Size];//Uma matriz unidimensional de strings, que contém todas as linhas do arquivo "./a2.js"
         public static int n5 = 0;//Início da região de escrita
         public static int n6 = 0;//Fim da região de escrita
         public static string[] textChanged1 = new string[textChanged1_Size];
+        public static string[] outText1 = new string[file1_Size];
         //Ler arquivo do path2 #start
 
         //Informações úteis #start
@@ -64,6 +65,7 @@ namespace Classe1
         public static int n2 = 0;//Número temporário de possíveis entradas para cada objeto
         public static int[] n3 = new int[Object_Size];//n3[objeto] = Número de possíveis entradas para este objeto
         public static int[,] n4 = new int[Position_Size, Object_Size];//n4[Position, Object] = Type [(0 = "Output"; 1 = "Input")];
+        public static string[] objects2 = new string[Object_Size];
         //Informações úteis #end
 
         public static void Main(string[] args)//Função principal
@@ -105,13 +107,18 @@ namespace Classe1
         {
             rules1 = File.ReadAllLines(path1);
 
+            int n9 = 0;
+
             for(int i1 = 0; i1 < rules1.Length; i1++)
             {
                 if(rules1[i1][0] == 'o' && rules1[i1][1] == ':' && rules1[i1][2] == ' ')
                 {
                     n2 = 0;
-                    n2++;
-                    n1++;
+
+                    if(n9 > 0)
+                    {
+                        n1++;
+                    }
 
                     rules1_Chars = new char[rules1[i1].Length - 3];
 
@@ -121,14 +128,17 @@ namespace Classe1
                     }
 
                     objects1[n2, n1, 0] = new string(rules1_Chars);
+                    objects2[n1] = new string(rules1_Chars);
                     n4[n2, n1] = 0;
 
                     Console.WriteLine(objects1[n2, n1, 0] + " | " + Convert.ToString(n4[n2, n1]) + " | " + Convert.ToString(n1));
+
+                    //n2++;
+
+                    n9++;
                 }
                 else if(rules1[i1][0] == 'i' && rules1[i1][1] == ':' && rules1[i1][2] == ' ')
                 {
-                    n2++;
-
                     rules1_Chars = new char[rules1[i1].Length - 3];
 
                     for(int i2 = 3; i2 < rules1[i1].Length; i2++)
@@ -140,6 +150,8 @@ namespace Classe1
                     n4[n2, n1] = 1;
 
                     Console.WriteLine(objects1[n2, n1, 1] + " | " + Convert.ToString(n4[n2, n1]) + " | " + Convert.ToString(n1));
+
+                    n2++;
                 }
 
                 n3[n1] = n2;
@@ -148,12 +160,112 @@ namespace Classe1
 
         public static void readFile2()//Lê o arquivo "./a2.js" e prepara informações
         {
-            
+            file1 = File.ReadAllLines(path2);
+
+            if(salvar.existe1("n5") == false)
+            {
+                salvar.write3("n5", "33");
+            }
+
+            if(salvar.existe1("n5") == true)
+            {
+                n5 = Convert.ToInt32(salvar.read2("n5"));
+            }
+
+            if(salvar.existe1("n6") == false)
+            {
+                salvar.write3("n6", "33");
+            }
+
+            if(salvar.existe1("n6") == true)
+            {
+                n6 = Convert.ToInt32(salvar.read2("n6"));
+            }
         }
 
         public static void writeFile1()//Escreve no arquivo "./a2.js", inserindo nele as verificações das regras
         {
-            
+            n6 = n1 * 5 + n5;
+            int n7 = 0;
+            int n8 = 0;
+
+            //Console.WriteLine("O problema não está acima deste lugar");
+
+            //Há algum erro aqui #start
+
+            for(int i1 = 0; i1 < n5; i1++)
+            {
+                outText1[i1] = file1[i1];
+            }
+
+            //Há algum erro aqui #end
+
+            for(int i1 = n5; i1 < n6; i1++)
+            {
+
+                if(n7 > 4)
+                {
+                    n7 = 0;
+                    n8++;
+                }
+
+                if(n7 == 0)
+                {
+                    outText1[i1] = "    if(";
+
+                    for(int i2 = 0; i2 < n3[n8]; i2++)
+                    {
+                        if(i2 == 0)
+                        {
+                            outText1[i1] = outText1[i1] + "value1 == " + objects1[i2, n8, 1];
+                        }
+
+                        if(i2 > 0)
+                        {
+                            outText1[i1] = outText1[i1] + " | value1 == " + objects1[i2, n8, 1];
+                        }
+                    }
+
+                    outText1[i1] = outText1[i1] + ")";
+                }
+
+                if(n7 == 1)
+                {
+                    outText1[i1] = "    {";
+                }
+
+                if(n7 == 2)
+                {
+                    outText1[i1] = "out1 = \"" + objects2[n8] + "\";";
+                }
+
+                if(n7 == 3)
+                {
+                    outText1[i1] = "    }";
+                }
+
+                if(n7 == 4)
+                {
+                    outText1[i1] = "    ";
+                }
+
+                n7++;
+            }
+
+            outText1[n6 + 2] = "}";
+
+            salvar.write3("n6", Convert.ToString(n6));
         }
+
+        /* 
+        function verificar2(value1)
+        {
+            if(value1 == "input1" | value1 == "input2")
+            {
+                out1 = "Out";
+            }
+
+        }
+         */
     }
 }

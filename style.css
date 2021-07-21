@@ -34,3 +34,12 @@ body{
 #link2{
     color: turquoise;
 }
+
+#link3{
+    color: turquoise;
+}
+
+#ol1{
+    list-style-type: square;
+    color: white;
+}
